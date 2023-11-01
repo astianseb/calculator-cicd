@@ -93,7 +93,7 @@ resource "google_cloudbuild_trigger" "repo_trigger" {
     repository = google_cloudbuildv2_repository.my_repository.id
     push {
     #  branch = "feature-.*"
-       branch = "main"
+       branch = "master"
     }
   }
 
