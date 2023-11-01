@@ -1,0 +1,27 @@
+steps:
+    - name: 'gcr.io/cloud-builders/docker'
+      args: ['build', '-t', '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}', './${_CODE_DIR}' ]
+    - name: 'gcr.io/cloud-builders/docker'
+      args: ['push', '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:$COMMIT_SHA']
+    # - name: 'gcr.io/cloud-builders/gcloud'
+    #   args:
+    #     - 'run'
+    #     - 'deploy'
+    #     - '${_SERVICE_NAME}'
+    #     - '--image'
+    #     - 'eu.gcr.io/$PROJECT_ID/${_SERVICE_NAME}:$COMMIT_SHA'
+    #     - '--region'
+    #     - '${_REGION}'
+    #     - '--platform'
+    #     - 'managed'
+    #     - '--port'
+    #     - '80'
+    #     - '--allow-unauthenticated'
+images:
+    - '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:$COMMIT_SHA'
+substitutions:
+    _LOCATION: europe-west1
+    _REPOSITORY: sg-repository
+    _IMAGE: sg-calculator
+    _CODE_DIR: 2-calculator-code
+    _SERVICE_NAME: sg-calculator-test
