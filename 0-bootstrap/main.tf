@@ -64,6 +64,17 @@ resource "google_secret_manager_secret_iam_policy" "policy" {
 
 }
 
+resource "google_project_iam_member" "cloud_run_admin" {
+  project     = google_project.project.project_id
+  role   = "roles/run.admin"
+  member = "serviceAccount:${google_project.project.number}@cloudbuild.gserviceaccount.com"
+}
+
+resource "google_project_iam_member" "sa_user" {
+  project     = google_project.project.project_id
+  role   = "roles/iam.serviceAccountUser"
+  member = "serviceAccount:${google_project.project.number}@cloudbuild.gserviceaccount.com"
+}
 
 resource "google_cloudbuildv2_connection" "my_connection" {
   project  = google_project.project.project_id
