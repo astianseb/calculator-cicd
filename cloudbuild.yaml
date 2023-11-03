@@ -15,7 +15,7 @@ steps:
         - '--platform'
         - 'managed'
         - '--port'
-        - '8080'
+        - '80'
         - '--allow-unauthenticated'
 images:
     - '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:$COMMIT_SHA'

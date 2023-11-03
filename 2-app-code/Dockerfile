@@ -6,7 +6,7 @@ COPY ./ ./
 RUN npm run build
 
 FROM nginx
-EXPOSE 8080
+EXPOSE 80
 
 COPY --from=builder /app/dist /usr/share/nginx/html/
 #CMD ["npm", "run", "dev"]
