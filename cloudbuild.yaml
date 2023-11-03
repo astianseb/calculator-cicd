@@ -3,20 +3,20 @@ steps:
       args: ['build', '-t', '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:$COMMIT_SHA', './${_CODE_DIR}' ]
     - name: 'gcr.io/cloud-builders/docker'
       args: ['push', '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:$COMMIT_SHA']
-    # - name: 'gcr.io/cloud-builders/gcloud'
-    #   args:
-    #     - 'run'
-    #     - 'deploy'
-    #     - '${_SERVICE_NAME}'
-    #     - '--image'
-    #     - '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:$COMMIT_SHA'
-    #     - '--region'
-    #     - '${_REGION}'
-    #     - '--platform'
-    #     - 'managed'
-    #     - '--port'
-    #     - '8080'
-    #     - '--allow-unauthenticated'
+    - name: 'gcr.io/cloud-builders/gcloud'
+      args:
+        - 'run'
+        - 'deploy'
+        - '${_SERVICE_NAME}'
+        - '--image'
+        - '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:$COMMIT_SHA'
+        - '--region'
+        - '${_REGION}'
+        - '--platform'
+        - 'managed'
+        - '--port'
+        - '8080'
+        - '--allow-unauthenticated'
 images:
     - '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:$COMMIT_SHA'
 substitutions:
