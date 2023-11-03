@@ -11,7 +11,7 @@ steps:
         - '--image'
         - '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:$COMMIT_SHA'
         - '--region'
-        - '${_REGION}'
+        - '${_LOCATION}'
         - '--platform'
         - 'managed'
         - '--port'
