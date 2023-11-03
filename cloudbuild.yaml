@@ -9,13 +9,13 @@ steps:
     #     - 'deploy'
     #     - '${_SERVICE_NAME}'
     #     - '--image'
-    #     - 'eu.gcr.io/$PROJECT_ID/${_SERVICE_NAME}:$COMMIT_SHA'
+    #     - '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:$COMMIT_SHA'
     #     - '--region'
     #     - '${_REGION}'
     #     - '--platform'
     #     - 'managed'
     #     - '--port'
-    #     - '80'
+    #     - '8080'
     #     - '--allow-unauthenticated'
 images:
     - '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:$COMMIT_SHA'
@@ -23,5 +23,5 @@ substitutions:
     _LOCATION: europe-west1
     _REPOSITORY: sg-repository
     _IMAGE: sg-calculator
-    _CODE_DIR: 2-calculator-code
-    _SERVICE_NAME: sg-calculator-test
+    _CODE_DIR: 2-app-code
+    _SERVICE_NAME: sg-app-test
