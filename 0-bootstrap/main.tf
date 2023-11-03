@@ -26,6 +26,12 @@ resource "google_project_service" "project_services" {
   service = each.value
 }
 
+resource "time_sleep" "wait_30_seconds" {
+  depends_on = [google_project_service.project_services]
+
+  create_duration = "30s"
+}
+
 resource "google_artifact_registry_repository" "my-repo" {
   repository_id = "sg-repository"
 
@@ -33,6 +39,7 @@ resource "google_artifact_registry_repository" "my-repo" {
   location      = var.region
   description   = "SG docker repository"
   format        = "DOCKER"
+  depends_on = [time_sleep.wait_30_seconds]
 }
 
 resource "google_secret_manager_secret" "github_token_secret" {
@@ -42,6 +49,7 @@ resource "google_secret_manager_secret" "github_token_secret" {
   }
   project = google_project.project.project_id
 
+  depends_on = [time_sleep.wait_30_seconds]
 }
 
 resource "google_secret_manager_secret_version" "github_secret_version" {
@@ -65,15 +73,22 @@ resource "google_secret_manager_secret_iam_policy" "policy" {
 }
 
 resource "google_project_iam_member" "cloud_run_admin" {
-  project     = google_project.project.project_id
-  role   = "roles/run.admin"
-  member = "serviceAccount:${google_project.project.number}@cloudbuild.gserviceaccount.com"
+  for_each = toset([
+    "roles/run.admin",
+    "roles/iam.serviceAccountUser"
+  ])
+
+  role       = each.value
+  member     = "serviceAccount:${google_project.project.number}@cloudbuild.gserviceaccount.com"
+  project    = google_project.project.project_id
+  depends_on = [time_sleep.wait_30_seconds]
 }
 
 resource "google_project_iam_member" "sa_user" {
   project     = google_project.project.project_id
   role   = "roles/iam.serviceAccountUser"
   member = "serviceAccount:${google_project.project.number}@cloudbuild.gserviceaccount.com"
+  depends_on = [time_sleep.wait_30_seconds]
 }
 
 resource "google_cloudbuildv2_connection" "my_connection" {
@@ -96,6 +111,13 @@ resource "google_cloudbuildv2_repository" "my_repository" {
   project           = google_project.project.project_id
 }
 
+
+resource "time_sleep" "wait_30_seconds_1" {
+  depends_on = [google_project_iam_member.sa_user]
+
+  create_duration = "30s"
+}
+
 resource "google_cloudbuild_trigger" "repo_trigger" {
   project  = google_project.project.project_id
   location = var.region
@@ -109,4 +131,5 @@ resource "google_cloudbuild_trigger" "repo_trigger" {
   }
 
   filename = "cloudbuild.yaml"
+  depends_on = [time_sleep.wait_30_seconds_1]
 }
